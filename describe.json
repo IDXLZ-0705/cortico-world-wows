@@ -1,0 +1,76 @@
+{
+  "tools": [
+    {
+      "name": "wows_look_now",
+      "description": "Look at the World of Warships screen right now: take a fresh screenshot, analyze it with the vision model, and report the current battle situation. Optionally ask a specific question about the scene.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "Optional question about the current scene, e.g. \"我旁边还有队友吗\"."
+          }
+        }
+      },
+      "tags": [
+        "read",
+        "snapshot"
+      ],
+      "summary": {
+        "zh": "立刻截屏看一眼《战舰世界》战场，报告当前战况，可附带问题。",
+        "en": "Takes a fresh screenshot of World of Warships and reports the current battle situation, optionally answering a question."
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "wows.started",
+      "description": {
+        "zh": "World 挂载完成。",
+        "en": "The World was mounted."
+      },
+      "trigger": "flush"
+    },
+    {
+      "type": "wows.battle_started",
+      "description": {
+        "zh": "检测到进入一场战斗。",
+        "en": "A battle started."
+      },
+      "trigger": "flush"
+    },
+    {
+      "type": "wows.battle_event",
+      "description": {
+        "zh": "战斗中的战况变化：击沉、比分、血量、阶段、新情况。",
+        "en": "Battle progress: kills, score, HP, phase or new facts."
+      },
+      "trigger": "debounce"
+    },
+    {
+      "type": "wows.highlight",
+      "description": {
+        "zh": "画面可确认的高光时刻：连续击沉、残血恢复、短时间发现多艘敌舰。",
+        "en": "A highlight moment confirmed from the screen: multi-kill, HP recovery from low, or many enemies spotted at once."
+      },
+      "trigger": "flush"
+    },
+    {
+      "type": "wows.battle_ended",
+      "description": {
+        "zh": "检测到离开战斗（结算或回港口）。",
+        "en": "The battle ended."
+      },
+      "trigger": "flush"
+    }
+  ],
+  "prompts": [
+    {
+      "key": "worlds.wows.envPrompt",
+      "title": "战舰世界桌宠 · 环境提示词",
+      "role": "envPrompt",
+      "content": "你正在通过截屏观看用户玩《战舰世界》。观战状态：{{wows.watchState}}；最近观察时间：{{wows.lastObservedAt}}；最近战况：{{wows.lastSummary}}。\r\n\r\n## 解说风格\r\n解说基调：{{wows.commentaryTone}}。收到击沉、高光等好消息时，用你自己的性格多夸奖、多鼓励；战况不利时先安慰再打气，不埋怨。不主动教打法、不推荐走位或加点、不评价用户操作对错，只解说战况并提供情绪价值。\r\n\r\n## 事件与工具\r\n战况变化会以 wows.* 事件送达，事件正文只陈述画面上能确认的事实；如何解说、用什么语气，由你自己的人格决定。想主动看一眼战场时调用 wows_look_now（可以带一个问题，比如\"我身边还有队友吗\"）；它有约 30 秒的调用限速，不要过于频繁。\r\n"
+    }
+  ]
+}
