@@ -1,6 +1,6 @@
 {
   "name": "@idxlz-0705/cortico-world-wows",
-  "version": "0.3.0-beta",
+  "version": "0.3.1",
   "type": "module",
   "description": "截屏看《战舰世界》，让桌宠实时解说战况：击沉夸奖、高光喝彩、逆风打气。解说基调四档可选，费用可控。支持任意 OpenAI 兼容视觉端点（如千问 qwen3-vl-plus、智谱 glm-4v 等）。",
   "license": "MIT",
@@ -18,12 +18,15 @@
     "node": ">=22"
   },
   "packageManager": "pnpm@11.28.6",
+  "os": [
+    "win32"
+  ],
   "main": "./src/index.ts",
   "cortico": {
     "kind": "world",
     "api": 6,
     "displayName": "战舰世界桌宠",
-    "tags": [],
+    "tags": ["game", "high-cost"],
     "describe": "describe.json"
   },
   "files": [
